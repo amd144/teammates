@@ -175,6 +175,19 @@ public abstract class FeedbackSubmissionEditSaveAction extends Action {
             }
         }
 
+        for (int questionIndx = numOfQuestionsToGet + 1; questionIndx <= 1000; questionIndx++) {
+            String totalResponsesForQuestion = getRequestParamValue(
+                    Const.ParamsNames.FEEDBACK_QUESTION_RESPONSETOTAL + "-" + questionIndx);
+
+            if (totalResponsesForQuestion != null) {
+                log.severe("Encountered responses in submission to questions that were not part of "
+                        + "the feedback session saved in the datastore!"
+                        + "\n\nParameters: " + HttpRequestHelper.printRequestParameters(request)
+                        + "\n\nQuestions in datastore: " + data.bundle.getSortedQuestions() + "\n");
+                break;
+            }
+        }
+
         saveNewReponses(responsesToSave);
         deleteResponses(responsesToDelete);
         updateResponses(responsesToUpdate);
