@@ -5,11 +5,14 @@ import teammates.common.datatransfer.attributes.FeedbackSessionAttributes;
 import teammates.common.exception.EntityDoesNotExistException;
 import teammates.common.util.Assumption;
 import teammates.common.util.Const;
+import teammates.common.util.Logger;
 import teammates.common.util.StatusMessage;
 import teammates.common.util.StatusMessageColor;
 import teammates.ui.pagedata.FeedbackSubmissionEditPageData;
 
 public abstract class FeedbackSubmissionEditPageAction extends Action {
+    private static final Logger log = Logger.getLogger();
+
     protected String courseId;
     protected String feedbackSessionName;
     protected FeedbackSubmissionEditPageData data;
@@ -42,6 +45,7 @@ public abstract class FeedbackSubmissionEditPageAction extends Action {
         String userEmailForCourse = getUserEmailForCourse();
         data = new FeedbackSubmissionEditPageData(account, student, sessionToken);
         data.bundle = getDataBundle(userEmailForCourse);
+        log.info("Loaded questions: " + data.bundle.getSortedQuestions());
 
         data.setSessionOpenForSubmission(isSessionOpenForSpecificUser(data.bundle.feedbackSession));
 
