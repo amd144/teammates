@@ -1,5 +1,7 @@
 package teammates.ui.controller;
 
+import java.util.stream.Collectors;
+
 import teammates.common.datatransfer.FeedbackSessionQuestionsBundle;
 import teammates.common.datatransfer.attributes.FeedbackSessionAttributes;
 import teammates.common.exception.EntityDoesNotExistException;
@@ -45,7 +47,10 @@ public abstract class FeedbackSubmissionEditPageAction extends Action {
         String userEmailForCourse = getUserEmailForCourse();
         data = new FeedbackSubmissionEditPageData(account, student, sessionToken);
         data.bundle = getDataBundle(userEmailForCourse);
-        log.info("Loaded questions: " + data.bundle.getSortedQuestions());
+        String questionsResponses = data.bundle.getSortedQuestions().stream()
+                .map(q -> q.toString() + "\n" + data.bundle.questionResponseBundle.get(q))
+                .collect(Collectors.joining("\n\n"));
+        log.info("Loaded questions and responses:\n\n" + questionsResponses);
 
         data.setSessionOpenForSubmission(isSessionOpenForSpecificUser(data.bundle.feedbackSession));
 
